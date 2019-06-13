@@ -1,0 +1,2 @@
+JTAG is used for programming to voletile memory.
+AS is used for programming to non-voletile memory.
