@@ -1,0 +1,7 @@
+
+
+Restart windows with command "shutdown /o /r /t 0"
+Choose startup -> advanced or whatever.
+Choose 7, startup without driver bullshit
+Install driver from this folder.
+Damn altera, fix your drivers man, you are a respectable company right???

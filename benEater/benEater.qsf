@@ -42,7 +42,7 @@ set_global_assignment -name DEVICE EP4CE6E22C8
 set_global_assignment -name TOP_LEVEL_ENTITY benEater
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "10:19:06  SEPTEMBER 05, 2020"
-set_global_assignment -name LAST_QUARTUS_VERSION "20.1.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -65,6 +65,17 @@ set_location_assignment PIN_137 -to Digits[3]
 set_location_assignment PIN_136 -to Digits[2]
 set_location_assignment PIN_135 -to Digits[1]
 set_location_assignment PIN_133 -to Digits[0]
+set_location_assignment PIN_141 -to LEDMATCOL[0]
+set_location_assignment PIN_138 -to LEDMATCOL[1]
+set_location_assignment PIN_143 -to LEDMATCOL[2]
+set_location_assignment PIN_142 -to LEDMATCOL[3]
+set_location_assignment PIN_1 -to LEDMATCOL[4]
+set_location_assignment PIN_144 -to LEDMATCOL[5]
+set_location_assignment PIN_3 -to LEDMATCOL[6]
+set_location_assignment PIN_2 -to LEDMATCOL[7]
+set_location_assignment PIN_10 -to LEDMATROW[0]
+set_location_assignment PIN_7 -to LEDMATROW[1]
+set_location_assignment PIN_11 -to LEDMATROW[2]
 set_location_assignment PIN_103 -to vSync
 set_location_assignment PIN_101 -to hSync
 set_location_assignment PIN_28 -to SD_DQ0
@@ -132,4 +143,5 @@ set_global_assignment -name VHDL_FILE Alu.vhd
 set_global_assignment -name VHDL_FILE Ram.vhd
 set_global_assignment -name VHDL_FILE ProgramCounter.vhd
 set_global_assignment -name VHDL_FILE Control.vhd
+set_global_assignment -name VHDL_FILE LedMatrix.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
