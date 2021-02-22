@@ -42,6 +42,8 @@ architecture struct of benEater is
 	signal pcd			: std_logic_vector(7 downto 0);
 	
 	signal mist			: std_logic_vector(7 downto 0);
+	signal flagsI		: std_logic_vector(7 downto 0);
+	signal flagsQ		: std_logic_vector(7 downto 0);
 
 	
 	signal seg1			: std_logic_vector(3 downto 0) := b"0000";
@@ -53,7 +55,9 @@ architecture struct of benEater is
 	signal BTN2			: std_logic := '0';
 	signal BTN3			: std_logic := '0';
 	signal BTN4			: std_logic := '0';
+	signal ONE			: std_logic := '0';
 	
+	signal DCLK			: std_logic := '0';
 	signal MCLK			: std_logic := '0';
 	signal NCLK			: std_logic := '0';
 	signal RST			: std_logic := '0';
@@ -71,17 +75,24 @@ architecture struct of benEater is
 	signal EO   : std_logic := '0';  -- ALU out
 	signal SU   : std_logic := '0';  -- ALU subtract
 	signal CY   : std_logic := '0';  -- ALU cary out
+	signal ZF   : std_logic := '0';  -- ALU Zero flag
 	signal OI   : std_logic := '0';  -- Output register in
 	signal CE   : std_logic := '0';  -- Program counter enable
 	signal CO   : std_logic := '0';  -- Program counter out
 	signal JP   : std_logic := '0';  -- Jump (program counter in)
 	signal FI   : std_logic := '0';  -- Flags in
 	
-	
 begin
 
-
-
+	RegF : entity work.Reg				--Register flags
+	port map(
+		clk			=> MCLK,	
+		ld 			=> FI,
+		oe				=> '0',
+		rst			=> RST,
+		dout			=> flagsQ,
+		databus		=> flagsI
+	);
 
 
 	RegA : entity work.Reg				--Register B
@@ -109,10 +120,11 @@ begin
 		sub			=> SU,
 		oe				=> EO,
 		co				=> CY,			
+		zo				=> ZF,
 		databus		=> databus,
 		dataA			=> DregA,
 		dataB			=> DregB);
-		
+
 	IR	: entity work.Reg					--Instruction register
 	port map	(
 		clk			=> MCLK,	
@@ -151,6 +163,16 @@ begin
 		dout			=> pcd,
 		rst			=> RST);
 		
+	REGO : entity work.Reg				--output register
+	port map	(
+		clk			=> MCLK,	
+		ld 			=> OI,
+		oe				=> '0',
+		rst			=> RST,
+		dout			=> OUTD,
+		databus		=> databus);
+	
+
 		
 				
 	ctrl : entity work.Control
@@ -158,6 +180,7 @@ begin
 		CLK			=> NCLK,
 		IST			=> IRD,
 		RST			=> RST,
+		FLG			=> flagsQ,
 		mistq 		=> mist(7 downto 4),
 		HLq			=> HL, 
 		MIq			=> MI, 
@@ -173,7 +196,8 @@ begin
 	   OIq			=> OI, 
 	   CEq			=> CE, 
 	   COq			=> CO, 
-	   JPq			=> JP);
+	   JPq			=> JP,
+		FIq			=> FI);
 		
 		
 	Seg : entity work.Segments
@@ -231,23 +255,40 @@ begin
 		result 	=> BTN4);
 
 		
-		
-	process(BTN3)
-	begin
-		if BTN3 = '1' then
-			MCLK <= clkdiv(22);
+	process(DCLK)
+	begin	
+		if ONE = '0' then
+			if BTN3 = '1' then
+				MCLK <= DCLK;
+			elsif BTN4 = '1' then
+				ONE <= '1';
+			else
+				MCLK <= BTN1;
+			end if;	
 		else
-			MCLK <= BTN1;
+			if MIST(7 downto 4) = "0000" then
+				ONE <= '0';
+			else
+				MCLK <= DCLK;
+			end if;
 		end if;
+
+
 	end process;
+	
+	flagsI(0) <= CY;	--Carry
+	flagsI(1) <= ZF;	--Zero
 		
-		
+	DCLK <= clkdiv(22);	
 	NCLK  <= not MCLK;
 	RST	<= BTN2;
 		
 	LED1	<= not MCLK;
 	LED2 	<= not NCLK;
 	LED3	<= not RST;
+	
+	SEG1 <= OUTD(7 downto 4);
+	SEG2 <= OUTD(3 downto 0);	
 	
 	
 	process(CLK)

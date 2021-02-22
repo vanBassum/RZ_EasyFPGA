@@ -33,7 +33,7 @@ begin
 					data <= seg3;
 					dig  <= "1101";
 				when "10" => 
-					data <= seg4;
+					data <= seg2;
 					dig  <= "1011";
 				when "11" => 
 					data <= seg1;
