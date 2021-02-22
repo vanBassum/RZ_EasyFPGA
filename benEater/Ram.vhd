@@ -18,8 +18,14 @@ end entity;
 architecture struct of Ram is 
 	TYPE memory IS ARRAY(7 DOWNTO 0) OF STD_LOGIC_VECTOR(7 DOWNTO 0);
 	signal ram 			: memory := (
-											0 => "00000000",
+											0 => x"01",	--LDA
+											1 => x"AA", 
 											others=>"00000000");
+	
+	
+	
+	
+	
 	
 	signal addr_int 	: integer range 0 to 255;
 begin

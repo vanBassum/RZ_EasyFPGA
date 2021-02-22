@@ -7,26 +7,28 @@ use  IEEE.STD_LOGIC_UNSIGNED.all;
 entity Control is
 	port(	
 		CLK	: in std_logic;							--Clock
+		RST	: in std_logic;							
 		IST	: in std_logic_vector(7 downto 0);	--Instruction
 		
+		MISTq	: OUT std_logic_vector(3 downto 0);	--microinstruciuont
 		
-		HL   	: out std_logic;  -- Halt clock
-		MI   	: out std_logic;  -- Memory address register in
-		RI   	: out std_logic;  -- RAM data in
-		RO   	: out std_logic;  -- RAM data out
-		IO   	: out std_logic;  -- Instruction register out
-		II   	: out std_logic;  -- Instruction register in
-		AI   	: out std_logic;  -- A register in
-		AO   	: out std_logic;  -- A register out
-		EO   	: out std_logic;  -- ALU out
-		SU   	: out std_logic;  -- ALU subtract
-		CY   	: out std_logic;  -- ALU cary out
-		BI   	: out std_logic;  -- B register in
-		OI   	: out std_logic;  -- Output register in
-		CE   	: out std_logic;  -- Program counter enable
-		CO   	: out std_logic;  -- Program counter out
-		JP   	: out std_logic;  -- Jump (program counter in)
-		FI   	: out std_logic);	-- Flags in
+		HLq  	: out std_logic;  -- Halt clock
+		MIq  	: out std_logic;  -- Memory address register in
+		RIq  	: out std_logic;  -- RAM data in
+		ROq  	: out std_logic;  -- RAM data out
+		IOq  	: out std_logic;  -- Instruction register out
+		IIq  	: out std_logic;  -- Instruction register in
+		AIq  	: out std_logic;  -- A register in
+		AOq  	: out std_logic;  -- A register out
+		EOq  	: out std_logic;  -- ALU out
+		SUq  	: out std_logic;  -- ALU subtract
+		BIq  	: out std_logic;  -- B register in
+		OIq  	: out std_logic;  -- Output register in
+		CEq  	: out std_logic;  -- Program counter enable
+		COq  	: out std_logic;  -- Program counter out
+		JPq  	: out std_logic  -- Jump (program counter in)
+		
+		);
 	
 end entity;
 
@@ -35,247 +37,92 @@ end entity;
 architecture struct of Control is 
 		signal MIST			: std_logic_vector(3 downto 0);		--Micro instrucion counter
 		signal CTRL			: std_logic_vector(15 downto 0);		--Control word
+		
+		
+		constant HL : std_logic_vector(15 downto 0) := x"0001";  -- Halt clock
+		constant MI : std_logic_vector(15 downto 0) := x"0002";  -- Memory address register in
+		constant RI : std_logic_vector(15 downto 0) := x"0004";  -- RAM data in
+		constant RO : std_logic_vector(15 downto 0) := x"0008";  -- RAM data out
+		constant IO : std_logic_vector(15 downto 0) := x"0010";  -- Instruction register out
+		constant II : std_logic_vector(15 downto 0) := x"0020";  -- Instruction register in
+		constant AI : std_logic_vector(15 downto 0) := x"0040";  -- A register in
+		constant AO : std_logic_vector(15 downto 0) := x"0080";  -- A register out
+		constant EO : std_logic_vector(15 downto 0) := x"0100";  -- ALU out
+		constant SU : std_logic_vector(15 downto 0) := x"0200";  -- ALU subtract
+		constant BI : std_logic_vector(15 downto 0) := x"0400";  -- B register in
+		constant OI : std_logic_vector(15 downto 0) := x"0800";  -- Output register in
+		constant CE : std_logic_vector(15 downto 0) := x"1000";  -- Program counter enable
+		constant CO : std_logic_vector(15 downto 0) := x"2000";  -- Program counter out
+		constant JP : std_logic_vector(15 downto 0) := x"4000";  -- Jump (program counter in)
+		constant DN	: std_logic_vector(15 downto 0) := x"8000";  -- Reset microinstruction counter
+		
 begin
 
 
-	process(CLK)
+	MISTq <= MIST;
+
+	process(CLK, RST)
 	begin
-		MIST <= MIST + 1;
+		if RST = '1' then
+			MIST <=X"0";
+		elsif rising_edge(clk) then
+			if (DN and CTRL) = DN then
+				MIST <=X"0";
+			else
+				MIST <= MIST + 1;
+			end if;
+		end if;
+
+		
 	end process;
 
 	
 	process(MIST)
-	begin	
+	begin		
+	
+	
+	
 		case MIST is
-		---START
 		
-		
-when x"0" =>        --NOP
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"1" =>        --LDA
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000010010";
-      when x"3" => CTRL <= "0000000001001000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"2" =>        --ADD
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000010010";
-      when x"3" => CTRL <= "0000010000001000";
-      when x"4" => CTRL <= "1000000101000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"3" =>        --SUB
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000010010";
-      when x"3" => CTRL <= "0000010000001000";
-      when x"4" => CTRL <= "1000001101000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"4" =>        --STA
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000010010";
-      when x"3" => CTRL <= "0000000010000100";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"5" =>        --LDI
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000001010000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"6" =>        --JMP
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0100000000010000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"7" =>        --JC
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"8" =>        --JZ
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"9" =>        --NA1
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"a" =>        --NA2
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"b" =>        --NA3
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"c" =>        --NA4
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"d" =>        --NA5
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"e" =>        --OUT
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000100010000000";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-when x"f" =>        --HLT
-  case MIST is
-      when x"0" => CTRL <= "0010000000000010";
-      when x"1" => CTRL <= "0001000000101000";
-      when x"2" => CTRL <= "0000000000000001";
-      when x"3" => CTRL <= "0000000000000000";
-      when x"4" => CTRL <= "0000000000000000";
-      when x"5" => CTRL <= "0000000000000000";
-      when x"6" => CTRL <= "0000000000000000";
-      when x"7" => CTRL <= "0000000000000000";
-      when others => CTRL <= "0000000000000000";
-  end case;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		---END
+			--First 2 are always fetch instruction.
+			when x"0" => CTRL <= CO OR MI;			-- Put program counter into memory address register
+			when x"1" => CTRL <= RO OR II OR CE;	-- Put ram data into instruction register and increase program counter
+			when others =>
+			
+				case IST is
+				
+					--LDA		(Loads next byte from ram into reg A)
+					when x"01" =>
+				
+						case MIST is
+							when x"2" 	=> CTRL <= CO OR MI OR CE;	--Put program counter into memory address register
+							when x"3"	=> CTRL <= RO OR AI OR DN; --Put ram into reg A
+							when others => CTRL <= x"0000";
+						end case;
+					
+					--NOP
+					when others =>
+						CTRL <= x"0000";	
+				end case;
 		end case;
-	end process;
-
-
-	HL <= CTRL(0);
-	MI <= CTRL(1);
-	RI <= CTRL(2);
-	RO <= CTRL(3);
-	IO <= CTRL(4);
-	II <= CTRL(5);
-	AI <= CTRL(6);
-	AO <= CTRL(7);
-	EO <= CTRL(8);
-	SU <= CTRL(9);
-	BI <= CTRL(10);
-	OI <= CTRL(11);
-	CE <= CTRL(12);
-	CO <= CTRL(13);
-	JP <= CTRL(14);
+	end process;	
+		
+		
+	HLq <= CTRL(0);
+	MIq <= CTRL(1);
+	RIq <= CTRL(2);
+	ROq <= CTRL(3);
+	IOq <= CTRL(4);
+	IIq <= CTRL(5);
+	AIq <= CTRL(6);
+	AOq <= CTRL(7);
+	EOq <= CTRL(8);
+	SUq <= CTRL(9);
+	BIq <= CTRL(10);
+	OIq <= CTRL(11);
+	CEq <= CTRL(12);
+	COq <= CTRL(13);
+	JPq <= CTRL(14);
 	
 	
 end;
