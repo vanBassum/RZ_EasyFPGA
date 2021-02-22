@@ -1,0 +1,10 @@
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\bin\Debug\Compiler.exe.config
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\bin\Debug\Compiler.exe
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\bin\Debug\Compiler.pdb
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\obj\Debug\Compiler.csprojAssemblyReference.cache
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\obj\Debug\Compiler.Form1.resources
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\obj\Debug\Compiler.Properties.Resources.resources
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\obj\Debug\Compiler.csproj.GenerateResource.cache
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\obj\Debug\Compiler.csproj.CoreCompileInputs.cache
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\obj\Debug\Compiler.exe
+C:\Workspace\RZ_EasyFPGA\benEater\compiler\Compiler\Compiler\obj\Debug\Compiler.pdb
