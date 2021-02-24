@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pinplan
+ variation_name="sram_0"
+ megafunction_name="ALTERA_UP_AVALON_SRAM"
+ intended_family="Cyclone IV E"
+ specifies="all_ports">
+ <global>
+  <pin name="clk" direction="input" scope="external" />
+  <pin name="reset" direction="input" scope="external" />
+  <pin name="SRAM_DQ[15..0]" direction="bidir" scope="external" />
+  <pin name="SRAM_ADDR[19..0]" direction="output" scope="external" />
+  <pin name="SRAM_LB_N" direction="output" scope="external" />
+  <pin name="SRAM_UB_N" direction="output" scope="external" />
+  <pin name="SRAM_CE_N" direction="output" scope="external" />
+  <pin name="SRAM_OE_N" direction="output" scope="external" />
+  <pin name="SRAM_WE_N" direction="output" scope="external" />
+  <pin name="address[19..0]" direction="input" scope="external" />
+  <pin name="byteenable[1..0]" direction="input" scope="external" />
+  <pin name="read" direction="input" scope="external" />
+  <pin name="write" direction="input" scope="external" />
+  <pin name="writedata[15..0]" direction="input" scope="external" />
+  <pin name="readdata[15..0]" direction="output" scope="external" />
+  <pin name="readdatavalid" direction="output" scope="external" />
+ </global>
+</pinplan>
