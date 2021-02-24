@@ -2,39 +2,18 @@ library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 use ieee.numeric_std.all;
+use IEEE.STD_LOGIC_UNSIGNED.all;
 
 
 
 entity VGA_Test is
 	port(
---		n_reset		: in std_logic;
 		clk			: in std_logic;
---
---		sramData		: inout std_logic_vector(7 downto 0);
---		sramAddress	: out std_logic_vector(15 downto 0);
---		n_sRamWE		: out std_logic;
---		n_sRamCS		: out std_logic;
---		n_sRamOE		: out std_logic;
---		
---		rxd1			: in std_logic;
---		txd1			: out std_logic;
---		rts1			: out std_logic;
---
---		rxd2			: in std_logic;
---		txd2			: out std_logic;
---		rts2			: out std_logic;
---		
---		videoSync	: out std_logic;
---		video			: out std_logic;
---
 		videoR		: out std_logic;
 		videoG		: out std_logic;
 		videoB		: out std_logic;
 		hSync			: out std_logic;
 		vSync			: out std_logic;
---		
---		Digits		: out std_logic_vector(3 downto 0);
---		Segments		: out std_logic_vector(7 downto 0);
 		LED1			: out std_logic;
 		LED2			: out std_logic;
 		LED3			: out std_logic;
@@ -42,28 +21,27 @@ entity VGA_Test is
 		KEY1			: in std_logic;
 		KEY2			: in std_logic;
 		KEY3			: in std_logic;
-		KEY4			: in std_logic
-	);
+		KEY4			: in std_logic);
 end entity;
 
 
+
 architecture struct of VGA_Test is
+	constant objects : integer := 24;
+
 	signal clk_40		: std_LOGIC;
 	signal disp_ena	: std_LOGIC;
-	signal disp_row	: integer;
-	signal disp_col	: integer;
-	signal thingy		: std_logic_vector(2 downto 0);
+	signal disp_x		: integer;
+	signal disp_y		: integer;
+	signal qd				: std_logic_vector(objects downto 0);
+	signal dp			: std_logic;
+	signal mvCLK			: std_logic;
+	signal clkdiv  		: std_logic_vector(31 downto 0);
+	--signal x				: std_logic_vector(15 downto 0);
+	--signal y				: std_logic_vector(15 downto 0);
 	
-	function To_Std_Logic(L: BOOLEAN) return std_ulogic is
-	begin
-		if L then
-			return('1');
-		else
-			return('0');
-		end if;
-	end function;
-begin
 
+begin
 
 	vga : entity work.vga_controller
 		generic map(
@@ -85,8 +63,8 @@ begin
 			h_sync		=> hSync,		--horiztonal sync pulse
 			v_sync		=> vSync,		--vertical sync pulse
 			disp_ena		=> disp_ena,	--display enable ('1' = display time, '0' = blanking time)
-			column		=> disp_col,	--horizontal pixel coordinate
-			row			=> disp_row		--vertical pixel coordinate
+			column		=> disp_x,		--horizontal pixel coordinate
+			row			=> disp_y		--vertical pixel coordinate
 			--n_blank						--direct blacking output to DAC
 			--n_sync							--sync-on-green output to DAC
 		);
@@ -97,18 +75,46 @@ begin
 		c0	 		=> clk_40
 	);
 	
+	
+	
+	
+	REGGEN:
+	for I in 0 to objects generate
+		movx : entity work.Mover
+		generic map(
+			speed => 16,
+			x => I * 32,
+			y => 10
+		)
+		port map (
+			clk	 => mvCLK,
+			disp_x => disp_x,
+			disp_y => disp_y,
+			q		 => qd(I)	
+		);
+		
+	
+	end generate REGGEN;
+	
+	mvCLK <= clkdiv(16) AND KEY1;
+	
 
 	process (clk)
 	begin
+	
+		if rising_edge(clk) then
+			clkdiv <= clkdiv + 1;
+		end if;
 		
-		thingy <= std_logic_vector(to_unsigned(disp_col / 100, thingy'length));
-
-		videoR <= thingy(0) and disp_ena;
-		videoG <= thingy(1) and disp_ena;
-		videoB <= thingy(2) and disp_ena;	
-
-	
-	
+		if qd > 0 then
+			dp <= '1';
+		else
+			dp <= '0';
+		end if;
+		
+		videoR <= dp and disp_ena;
+		videoG <= dp and disp_ena;
+		videoB <= dp and disp_ena;	
 	end process;
 	
 

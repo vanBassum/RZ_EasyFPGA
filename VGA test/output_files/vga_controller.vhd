@@ -19,6 +19,7 @@
 --     Initial Public Release
 --   Version 1.1 03/07/2018 Scott Larson
 --     Corrected two minor "off-by-one" errors
+--	  https://www.digikey.com/eewiki/pages/viewpage.action?pageId=15925278
 --    
 --------------------------------------------------------------------------------
 
