@@ -19,21 +19,18 @@ architecture struct of Ram is
 	TYPE memory IS ARRAY(31 DOWNTO 0) OF STD_LOGIC_VECTOR(7 DOWNTO 0);
 	signal ram 			: memory := (
 	
-0 => x"01", --LDI
-1 => x"05", --
-2 => x"04", --OUT
-3 => x"09", --SUI
-4 => x"01", --
-5 => x"04", --OUT
-6 => x"08", --JNZ
-7 => x"03", --
-8 => x"01", --LDI
-9 => x"08", --
-10 => x"04", --OUT
-11 => x"FF", --HLT
-
-
-
+0 => x"01", 	--Writes value to REGA
+1 => x"05",
+2 => x"04", 	--Writes REGA to Output
+3 => x"09", 	--Decreases REGA by value
+4 => x"01",
+5 => x"04", 	--Writes REGA to Output
+6 => x"08", 	--Jumps to address or label if REGA is not zero
+7 => x"03",
+8 => x"01", 	--Writes value to REGA
+9 => x"08",
+10 => x"04", 	--Writes REGA to Output
+11 => x"FF", 	--Stops code execution
 
 
 

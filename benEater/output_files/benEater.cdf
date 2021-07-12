@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EP4CE6E22) Path("C:/Workspace/RZ_EasyFPGA/benEater/output_files/") File("benEater.sof") MfrSpec(OpMask(1));
+		Device PartName(EP4CE6E22) Path("C:/WSHome/RZ_EasyFPGA/benEater/output_files/") File("benEater.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

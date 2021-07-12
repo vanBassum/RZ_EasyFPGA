@@ -20,9 +20,7 @@ entity benEater is
 			KEY1			: in std_logic;
 			KEY2			: in std_logic;
 			KEY3			: in std_logic;
-			KEY4			: in std_logic;
-			LEDMATCOL	: out std_logic_vector(7 downto 0);
-			LEDMATROW	: out std_logic_vector(2 downto 0));
+			KEY4			: in std_logic);
 end entity;
 
 
@@ -114,7 +112,6 @@ begin
 		dout			=> dregb,
 		databus		=> databus);	
 		
-
 	Alu : entity work.Alu				--Arithmetic logic unit
 	port map	(
 		sub			=> SU,
@@ -171,11 +168,8 @@ begin
 		rst			=> RST,
 		dout			=> OUTD,
 		databus		=> databus);
-	
-
-		
-				
-	ctrl : entity work.Control
+			
+	ctrl : entity work.Control			--Control logic
 	port map(
 		CLK			=> NCLK,
 		IST			=> IRD,
@@ -200,7 +194,7 @@ begin
 		FIq			=> FI);
 		
 		
-	Seg : entity work.Segments
+	Seg : entity work.Segments			-- Driver for the 7 segment display 
 	port map
 	(
 		clk 			=> clkdiv(10),
@@ -211,22 +205,7 @@ begin
 		seg3			=> seg3,
 		seg4			=> seg4);
 		
-	LedMatrix_1 : entity work.LedMatrix
-	port map(
-		clk		 => clkdiv(12),
-		blue1		 => mist,
-		blue2		 => pcd,
-		red1		 => databus,
-		red2		 => MARD,
-		red3		 => IRD,
-		red4		 => drega,
-		red5		 => dregb,
-		LEDMATCOL => LEDMATCOL,
-		LEDMATROW => LEDMATROW);
-		
-		
-		
-	debounce_1 : entity work.debounce
+	debounce_1 : entity work.debounce	
 	port map(
 		reset_n	=> '1',
 		clk 		=> clk,
@@ -255,7 +234,7 @@ begin
 		result 	=> BTN4);
 
 		
-	process(DCLK)
+	process(DCLK)							-- Clock divider
 	begin	
 		if ONE = '0' then
 			if BTN3 = '1' then
