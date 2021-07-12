@@ -25,15 +25,15 @@ I made some modifications in order to do a bit more with this cpu. For example, 
 The address bus is 8 bits, so 256 bytes of ram can be accessed.
 
 
- -LDI, Sets reg A to value, with value in next byte
- -LDA, loads ram to regA,  with address in next byte
- -STA, Stores REGA to RAM, with address in next byte
- -OUT, Outputs REGA to output register
- -ADI, Adds reg A to value, with value in next byte
- -ADD, Adds reg A to whatever is in ram at address x, with x in next byte
- -JP,  Jump to address in next byte
- -JNZ, Jump when zeroflag is not set
- -SUI, Substracts value from REGA, with value in next byte
- -HLT, Stops code execution
+ - LDI, Sets reg A to value, with value in next byte
+ - LDA, loads ram to regA,  with address in next byte
+ - STA, Stores REGA to RAM, with address in next byte
+ - OUT, Outputs REGA to output register
+ - ADI, Adds reg A to value, with value in next byte
+ - ADD, Adds reg A to whatever is in ram at address x, with x in next byte
+ - JP,  Jump to address in next byte
+ - JNZ, Jump when zeroflag is not set
+ - SUI, Substracts value from REGA, with value in next byte
+ - HLT, Stops code execution
 
 # Compiler
