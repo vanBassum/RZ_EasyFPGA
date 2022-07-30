@@ -33,7 +33,8 @@ ARCHITECTURE behavior OF hw_image_generator IS
 	signal char_val	: STD_LOGIC_VECTOR (7 DOWNTO 0);
 	signal rom_addr	: STD_LOGIC_VECTOR (9 DOWNTO 0);
 	signal rom_q		: STD_LOGIC_VECTOR (7 DOWNTO 0);
-	signal rom_shf		: STD_LOGIC_VECTOR (7 DOWNTO 0);
+	signal pixel 		: STD_LOGIC;
+	signal chval		: INTEGER;
 BEGIN
 
 	txtram : entity work.txtram
@@ -75,16 +76,19 @@ BEGIN
 		col <= px / 8;
 		row <= py / 8;
 		
+		char_addr <= std_logic_vector(to_unsigned(col + row * 100, char_addr'length));
+				
+		rom_addr(2 downto 0) <= std_logic_vector(to_unsigned(py, 4))(2 downto 0);
+		rom_addr(9 downto 3) <= char_val(6 downto 0);
+		pixel <= rom_q((px + 4) mod 8);
 		
-		char_addr <= std_logic_vector(to_unsigned(col + row * 64, char_addr'length));
-		rom_addr <= std_logic_vector(to_unsigned((TO_INTEGER(unsigned(char_val)) * 8) + (py mod 8), rom_addr'length));
-		rom_shf <= std_logic_vector(shift_right(unsigned(rom_q), px mod 8));
-
+		
+		
 
 		IF(disp_ena = '1') THEN
 
-			red 	<= std_logic_vector(to_unsigned(px / 80, 1))(0);
-			green <= rom_shf(0);
+			red 	<= std_logic_vector(to_unsigned(px / 8, 1))(0);
+			green <= pixel;
 			blue 	<= '1';
 			
 		else

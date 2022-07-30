@@ -74,7 +74,7 @@ BEGIN
 		clock_enable_output_a => "BYPASS",
 		clock_enable_output_b => "BYPASS",
 		indata_reg_b => "CLOCK1",
-		init_file => "../../../Users/Bas/Desktop/font.hex",
+		init_file => "hex/font.hex",
 		intended_device_family => "Cyclone IV E",
 		lpm_type => "altsyncram",
 		numwords_a => 1024,
