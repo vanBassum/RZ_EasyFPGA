@@ -384,3 +384,6 @@ MasterLibrary/MasterLibrary/MasterLibrary.csproj
 STDLib/STDLib.xml
 Documentation/docfx
 STDLib/STDLib.xml
+
+!font.hex
+!text.hex
