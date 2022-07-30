@@ -27,8 +27,6 @@ end entity;
 
 ARCHITECTURE behavior OF hw_image_generator IS
 	signal div			: STD_LOGIC_VECTOR(2 downto 0);
-	signal col			: INTEGER;
-	signal row 			: INTEGER;
 	signal char_addr	: STD_LOGIC_VECTOR (9 DOWNTO 0);
 	signal char_val	: STD_LOGIC_VECTOR (7 DOWNTO 0);
 	signal rom_addr	: STD_LOGIC_VECTOR (9 DOWNTO 0);
@@ -72,17 +70,11 @@ BEGIN
 
 	PROCESS(disp_ena, clk)
 	BEGIN
-
-		col <= px / 8;
-		row <= py / 8;
-		
-		char_addr <= std_logic_vector(to_unsigned(col + row * 100, char_addr'length));
+		char_addr <= std_logic_vector(to_unsigned(px / 8 + (py / 8) * (res_x/8), char_addr'length));
 				
 		rom_addr(2 downto 0) <= std_logic_vector(to_unsigned(py, 4))(2 downto 0);
 		rom_addr(9 downto 3) <= char_val(6 downto 0);
-		pixel <= rom_q((px + 4) mod 8);
-		
-		
+		pixel <= rom_q(px mod 8);
 		
 
 		IF(disp_ena = '1') THEN
